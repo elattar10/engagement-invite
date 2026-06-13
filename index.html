@@ -859,4 +859,625 @@ body {
   cursor: pointer;
   font-family: 'Tajawal', sans-serif;
   font-size: 14px;
-  font-weight: 50
+  font-weight: 500;
+  color: var(--green-deep);
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  text-align: right;
+}
+.share-option-btn:hover {
+  background: rgba(201,163,93,0.12);
+  border-color: var(--gold);
+  transform: translateX(-2px);
+}
+.share-option-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.share-option-icon.whatsapp { background: #25d366; font-size: 20px; }
+.share-option-icon.copy { background: var(--green); font-size: 18px; }
+.share-option-text { flex: 1; }
+.share-option-label { font-size: 14px; font-weight: 600; }
+.share-option-desc  { font-size: 11px; opacity: 0.6; }
+
+/* Copy feedback */
+.copy-feedback {
+  display: none;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--green);
+  background: rgba(92,111,82,0.08);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(92,111,82,0.2);
+}
+.copy-feedback.show { display: block; }
+
+.date-meta {
+  font-size: 13px; letter-spacing: 2px;
+  color: var(--green-deep); text-transform: uppercase;
+  margin-top: 8px; position: relative; z-index: 1;
+}
+.location { margin-top: 18px; font-size: 15px; font-weight: 700; color: var(--green-deep); position: relative; z-index: 1; }
+.reception { font-family: 'EB Garamond', serif; font-style: italic; font-size: 22px; color: var(--green); margin-top: 6px; direction: ltr; position: relative; z-index: 1; }
+
+/* Music btn */
+.music-btn {
+  position: fixed; bottom: 22px; left: 22px;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--green-deep); color: #fffdf8;
+  border: none; font-size: 20px; cursor: pointer;
+  z-index: 500; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s;
+}
+.music-btn:hover { transform: scale(1.1); }
+
+/* Petal canvas */
+#petal-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
+
+/* Reveal animation */
+.reveal-item {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-item.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ CURTAIN SCREEN ══════════════ -->
+<div id="curtain-screen">
+  <div id="stars-container"></div>
+  <div class="stage-light"></div>
+
+  <div class="pelmet">
+    <div class="pelmet-swag" id="pelmet-swag"></div>
+  </div>
+
+  <svg class="wave-top" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,52 C120,80 240,24 360,52 C480,80 600,24 720,52 C840,80 960,24 1080,52 C1200,80 1320,24 1440,52 L1440,0 L0,0 Z" fill="#c9a35d" opacity="0.18"/>
+    <path d="M0,60 C120,88 240,32 360,60 C480,88 600,32 720,60 C840,88 960,32 1080,60 C1200,88 1320,32 1440,60" stroke="#c9a35d" stroke-width="1.5" fill="none" opacity="0.35"/>
+  </svg>
+  <svg class="wave-bottom" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,52 C120,80 240,24 360,52 C480,80 600,24 720,52 C840,80 960,24 1080,52 C1200,80 1320,24 1440,52 L1440,0 L0,0 Z" fill="#c9a35d" opacity="0.18"/>
+    <path d="M0,60 C120,88 240,32 360,60 C480,88 600,32 720,60 C840,88 960,32 1080,60 C1200,88 1320,32 1440,60" stroke="#c9a35d" stroke-width="1.5" fill="none" opacity="0.35"/>
+  </svg>
+
+  <div class="curtain-left">
+    <svg class="curtain-shape" viewBox="0 0 300 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cgl" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0%"   stop-color="#4a6040"/>
+          <stop offset="30%"  stop-color="#354d2c"/>
+          <stop offset="60%"  stop-color="#3f5235"/>
+          <stop offset="80%"  stop-color="#2e4228"/>
+          <stop offset="100%" stop-color="#3f5235"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,0 L280,0 C270,90 290,140 275,200 C260,260 280,310 270,370 C258,430 278,480 265,540 C252,600 272,650 260,710 C248,770 268,820 255,900 L0,900 Z" fill="url(#cgl)"/>
+      <path d="M60,0 C55,100 65,200 58,300 C51,400 63,500 56,600 C49,700 61,800 55,900" stroke="rgba(0,0,0,0.12)" stroke-width="28" fill="none"/>
+      <path d="M130,0 C124,100 136,200 128,300 C120,400 134,500 126,600 C118,700 132,800 124,900" stroke="rgba(0,0,0,0.09)" stroke-width="22" fill="none"/>
+      <path d="M200,0 C194,100 206,200 198,300 C190,400 204,500 196,600" stroke="rgba(0,0,0,0.07)" stroke-width="18" fill="none"/>
+      <path d="M275,0 C265,90 285,140 270,200 C255,260 275,310 265,370 C253,430 273,480 260,540 C247,600 267,650 255,710 C243,770 263,820 250,900" stroke="#c9a35d" stroke-width="4" fill="none" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="curtain-right">
+    <svg class="curtain-shape" viewBox="0 0 300 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cgr" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#4a6040"/>
+          <stop offset="30%"  stop-color="#354d2c"/>
+          <stop offset="60%"  stop-color="#3f5235"/>
+          <stop offset="80%"  stop-color="#2e4228"/>
+          <stop offset="100%" stop-color="#3f5235"/>
+        </linearGradient>
+      </defs>
+      <path d="M300,0 L20,0 C30,90 10,140 25,200 C40,260 20,310 30,370 C42,430 22,480 35,540 C48,600 28,650 40,710 C52,770 32,820 45,900 L300,900 Z" fill="url(#cgr)"/>
+      <path d="M240,0 C245,100 235,200 242,300 C249,400 237,500 244,600 C251,700 239,800 245,900" stroke="rgba(0,0,0,0.12)" stroke-width="28" fill="none"/>
+      <path d="M170,0 C176,100 164,200 172,300 C180,400 166,500 174,600 C182,700 168,800 176,900" stroke="rgba(0,0,0,0.09)" stroke-width="22" fill="none"/>
+      <path d="M100,0 C106,100 94,200 102,300 C110,400 96,500 104,600" stroke="rgba(0,0,0,0.07)" stroke-width="18" fill="none"/>
+      <path d="M25,0 C35,90 15,140 30,200 C45,260 25,310 35,370 C47,430 27,480 40,540 C53,600 33,650 45,710 C57,770 37,820 50,900" stroke="#c9a35d" stroke-width="4" fill="none" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="curtain-center">
+    <div class="curtain-welcome">أهلاً وسهلاً</div>
+    <div class="ornament">❧ ✦ ❧</div>
+    <div class="curtain-guest-name" id="curtain-typed-name"></div>
+    <div class="ornament" id="ornament-below" style="opacity:0">── ✦ ──</div>
+
+    <div class="curtain-card" id="curtain-card" style="opacity:0; transition: opacity 0.6s ease;">
+      <div class="curtain-card-label">دعوة خطوبة</div>
+      <div style="color:rgba(201,163,93,0.5); font-size:13px; margin: 2px 0;">✦ ✦ ✦</div>
+      <div class="curtain-card-date">Ahmed &amp; Zynap</div>
+      <div style="color:rgba(201,163,93,0.5); font-size:13px; margin: 2px 0;">── ✦ ──</div>
+      <div class="curtain-card-venue">15 June 2026 • 08:00 PM</div>
+      <div class="curtain-card-venue" style="font-size:12px; opacity:0.7;">Diarb Negm, LE Plaza Hall</div>
+    </div>
+
+    <button class="open-btn" id="open-btn" style="opacity:0; transition: opacity 0.6s ease 0.2s;" onclick="openCurtain()">
+      ✦ اضغط هنا لفتح الدعوة ✦
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════ PETAL CANVAS ══════════════ -->
+<canvas id="petal-canvas"></canvas>
+
+<!-- ══════════════ SHARE MODAL ══════════════ -->
+<div class="share-modal-overlay" id="share-modal-overlay" onclick="closeShareModal(event)">
+  <div class="share-modal">
+    <button class="share-modal-close" onclick="closeShareModal()">✕</button>
+    <div style="font-size:28px; margin-bottom:8px;">💌</div>
+    <div class="share-modal-title">شارك الدعوة</div>
+    <div class="share-modal-sub">وزّع الفرحة مع أهل الخير</div>
+
+    <div class="share-options">
+      <button class="share-option-btn" onclick="shareWhatsApp()">
+        <div class="share-option-icon whatsapp">💬</div>
+        <div class="share-option-text">
+          <div class="share-option-label">واتساب</div>
+          <div class="share-option-desc">أرسل الدعوة مباشرة</div>
+        </div>
+      </button>
+
+      <button class="share-option-btn" onclick="copyLink()">
+        <div class="share-option-icon copy" style="color:#fffdf8;">🔗</div>
+        <div class="share-option-text">
+          <div class="share-option-label">نسخ الرابط</div>
+          <div class="share-option-desc">انسخ رابط الدعوة</div>
+        </div>
+      </button>
+    </div>
+
+    <div class="copy-feedback" id="copy-feedback">
+      ✅ تم نسخ الرابط بنجاح!
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MAIN CARD ══════════════ -->
+<div id="main-card">
+  <div class="card">
+
+    <!-- Flower corners -->
+    <svg class="flower-top" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g opacity="0.9">
+        <ellipse cx="120" cy="60" rx="35" ry="22" fill="#f3ece0" stroke="#e3d8c4" stroke-width="1" transform="rotate(20 120 60)"/>
+        <ellipse cx="150" cy="40" rx="32" ry="20" fill="#f7f1e7" stroke="#e3d8c4" stroke-width="1" transform="rotate(-10 150 40)"/>
+        <ellipse cx="160" cy="80" rx="30" ry="20" fill="#f3ece0" stroke="#e3d8c4" stroke-width="1" transform="rotate(50 160 80)"/>
+        <ellipse cx="130" cy="95" rx="28" ry="18" fill="#f7f1e7" stroke="#e3d8c4" stroke-width="1" transform="rotate(-30 130 95)"/>
+        <circle cx="140" cy="65" r="10" fill="#d8b87a"/>
+        <path d="M40 180 C 70 150, 90 120, 150 70" stroke="#8aa07a" stroke-width="3" fill="none" opacity="0.6"/>
+        <ellipse cx="70" cy="150" rx="22" ry="9" fill="#9cb389" opacity="0.7" transform="rotate(-40 70 150)"/>
+        <ellipse cx="100" cy="115" rx="20" ry="8" fill="#9cb389" opacity="0.7" transform="rotate(-35 100 115)"/>
+      </g>
+    </svg>
+    <svg class="flower-bottom" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g opacity="0.9">
+        <ellipse cx="120" cy="60" rx="35" ry="22" fill="#f3ece0" stroke="#e3d8c4" stroke-width="1" transform="rotate(20 120 60)"/>
+        <ellipse cx="150" cy="40" rx="32" ry="20" fill="#f7f1e7" stroke="#e3d8c4" stroke-width="1" transform="rotate(-10 150 40)"/>
+        <ellipse cx="160" cy="80" rx="30" ry="20" fill="#f3ece0" stroke="#e3d8c4" stroke-width="1" transform="rotate(50 160 80)"/>
+        <ellipse cx="130" cy="95" rx="28" ry="18" fill="#f7f1e7" stroke="#e3d8c4" stroke-width="1" transform="rotate(-30 130 95)"/>
+        <circle cx="140" cy="65" r="10" fill="#d8b87a"/>
+        <path d="M40 180 C 70 150, 90 120, 150 70" stroke="#8aa07a" stroke-width="3" fill="none" opacity="0.6"/>
+        <ellipse cx="70" cy="150" rx="22" ry="9" fill="#9cb389" opacity="0.7" transform="rotate(-40 70 150)"/>
+        <ellipse cx="100" cy="115" rx="20" ry="8" fill="#9cb389" opacity="0.7" transform="rotate(-35 100 115)"/>
+      </g>
+    </svg>
+
+    <div class="bismillah reveal-item">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+
+    <div class="invite-ornament reveal-item">
+      <div class="invite-ornament-line"></div>
+      <div class="invite-ornament-dot"></div>
+      <span style="color:var(--gold);font-size:16px;opacity:0.7;">❧</span>
+      <div class="invite-ornament-dot"></div>
+      <div class="invite-ornament-line"></div>
+    </div>
+
+    <!-- ══ FAMILIES BOX — REDESIGNED ══ -->
+    <div class="families-box reveal-item">
+      <div class="families-outer">
+        <div class="families-inner">
+          <!-- Corner ornaments -->
+          <span class="fam-corner tl">❧</span>
+          <span class="fam-corner tr">❧</span>
+          <span class="fam-corner bl">❧</span>
+          <span class="fam-corner br">❧</span>
+
+          <!-- Header -->
+          <div class="families-header">
+            <div class="families-bismillah-line">
+              <div class="fam-line"></div>
+              <span class="families-bismillah-icon">✾</span>
+              <div class="fam-line"></div>
+            </div>
+            <div class="families-invite-label">~ دعوة كريمة ~</div>
+            <div class="families-invite-text">
+              يُشرفنا دعوتكم لحضور
+              <span class="accent">✦ حفل الخطوبة المبارك ✦</span>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="families-divider">
+            <div class="families-divider-line"></div>
+            <div class="families-divider-center">
+              <span>❖</span>
+              <span style="font-size:10px; letter-spacing:2px; font-family:'Tajawal';">عائلات</span>
+              <span>❖</span>
+            </div>
+            <div class="families-divider-line"></div>
+          </div>
+
+          <!-- Family names -->
+          <div class="families-row">
+            <div class="family-block">
+              <div class="family-tag">آل</div>
+              <div class="family-name">العطار</div>
+            </div>
+
+            <div class="family-sep">
+              <span>✦</span>
+              <span style="letter-spacing:1px; font-size:10px; font-family:'Tajawal';">و</span>
+              <span>✦</span>
+            </div>
+
+            <div class="family-block">
+              <div class="family-tag">آل</div>
+              <div class="family-name">محرات</div>
+            </div>
+          </div>
+
+          <!-- Blessing -->
+          <div class="families-divider" style="margin: 12px 0 8px;">
+            <div class="families-divider-line"></div>
+            <span style="color:var(--gold); font-size:12px; opacity:0.6;">❋</span>
+            <div class="families-divider-line"></div>
+          </div>
+          <div class="families-blessing">
+            بارك الله لهما وبارك عليهما وجمع بينهما في خير
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="invite-ornament reveal-item">
+      <div class="invite-ornament-line"></div>
+      <div class="invite-ornament-dot"></div>
+      <span style="color:var(--gold);font-size:16px;opacity:0.7;">❧</span>
+      <div class="invite-ornament-dot"></div>
+      <div class="invite-ornament-line"></div>
+    </div>
+
+    <div class="card-guest-label reveal-item" id="card-guest-label" style="display:none">المدعو / المدعوة</div>
+    <div class="card-guest-name reveal-item" id="card-guest-name"></div>
+
+    <!-- Sparkle name block -->
+    <div class="name-glow reveal-item" style="position:relative; z-index:1;">
+      <div class="sparkle-wrap" id="sparkle-wrap-1">
+        <div class="names names-shimmer">Eng. <span class="name-cap">A</span>hmed</div>
+      </div>
+      <div class="amp">✦ &amp; ✦</div>
+      <div class="sparkle-wrap" id="sparkle-wrap-2">
+        <div class="names names-shimmer">Dr. Zynap</div>
+      </div>
+      <!-- Sparkle stars injected by JS -->
+    </div>
+
+    <div class="divider reveal-item"></div>
+
+    <!-- Countdown or Celebration -->
+    <div class="countdown-wrap reveal-item" id="countdown-wrap">
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-days">--</div>
+        <div class="countdown-label">يوم</div>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-hours">--</div>
+        <div class="countdown-label">ساعة</div>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-mins">--</div>
+        <div class="countdown-label">دقيقة</div>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-secs">--</div>
+        <div class="countdown-label">ثانية</div>
+      </div>
+    </div>
+
+    <!-- Celebration message (shown when event has passed / is today) -->
+    <div class="celebration-wrap reveal-item" id="celebration-wrap">
+      <div class="celeb-ring">💍</div>
+      <div class="celeb-title">مبروك الخطوبة المباركة</div>
+      <div class="celeb-subtitle">أحمد &amp; زينب — ١٥ يونيو ٢٠٢٦</div>
+      <div class="celeb-rings">
+        <span class="ring-icon">💍</span>
+        <span class="ring-icon">🌿</span>
+        <span class="ring-icon">💍</span>
+      </div>
+      <div class="celeb-dua">
+        بارك الله لهما وبارك عليهما<br>
+        وجمع بينهما في خيرٍ وسعادة
+      </div>
+    </div>
+
+    <div class="date-meta reveal-item">Monday • 15 June 2026 • 08:00 PM</div>
+    <div class="location reveal-item">Diarb Negm , LE Plaza Hall</div>
+    <div class="reception reveal-item">Reception to follow</div>
+
+    <!-- Action buttons -->
+    <div class="action-buttons reveal-item">
+      <a class="map-btn" href="https://maps.app.goo.gl/xneJZV6PwufHAmxP9" target="_blank" rel="noopener">
+        📍 الموقع على الخريطة
+      </a>
+      <button class="calendar-btn" onclick="addToCalendar()">
+        📅 أضف للتقويم
+      </button>
+      <button class="share-btn" onclick="openShareModal()">
+        🔗 شارك الدعوة
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ MUSIC BTN ══════════════ -->
+<button class="music-btn" id="music-btn" onclick="toggleMusic()" title="موسيقى">🔇</button>
+<audio id="bg-music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ─── Stars ─── */
+const starsContainer = document.getElementById('stars-container');
+for (let i = 0; i < 40; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = 1.5 + Math.random() * 3;
+  s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*3}s;--delay:${Math.random()*4}s;`;
+  starsContainer.appendChild(s);
+}
+
+/* ─── Pelmet arcs ─── */
+const swagEl = document.getElementById('pelmet-swag');
+const nArcs = Math.ceil(window.innerWidth / 46) + 2;
+for (let i = 0; i < nArcs; i++) {
+  const arc = document.createElement('div');
+  arc.className = 'pelmet-swag-arc';
+  swagEl.appendChild(arc);
+}
+
+/* ─── Guest name from URL ─── */
+const params   = new URLSearchParams(location.search);
+const guestRaw = params.get('name') || '';
+const guest    = decodeURIComponent(guestRaw).trim();
+
+/* ─── Typewriter ─── */
+function typeWriter(el, text, speed, done) {
+  let i = 0;
+  function tick() {
+    el.textContent += text[i++];
+    if (i < text.length) setTimeout(tick, speed);
+    else if (done) done();
+  }
+  if (!text) { if (done) done(); return; }
+  tick();
+}
+
+const curtainNameEl = document.getElementById('curtain-typed-name');
+const displayName   = guest || 'أهلاً وسهلاً';
+
+typeWriter(curtainNameEl, displayName, 75, () => {
+  setTimeout(() => {
+    const ob = document.getElementById('ornament-below');
+    ob.style.opacity = '1';
+    ob.style.transition = 'opacity 0.5s';
+  }, 100);
+  setTimeout(() => { document.getElementById('curtain-card').style.opacity = '1'; }, 300);
+  setTimeout(() => { document.getElementById('open-btn').style.opacity = '1'; }, 600);
+});
+
+/* ─── Open curtain ─── */
+function openCurtain() {
+  const cs = document.getElementById('curtain-screen');
+  cs.classList.add('open');
+  setTimeout(() => {
+    cs.classList.add('gone');
+    showCard();
+    launchPetals();
+  }, 900);
+}
+
+/* ─── Show main card ─── */
+function showCard() {
+  document.getElementById('main-card').classList.add('visible');
+  if (guest) {
+    document.getElementById('card-guest-label').style.display = 'block';
+    document.getElementById('card-guest-name').textContent = guest;
+  }
+  document.querySelectorAll('.reveal-item').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), 200 + i * 90);
+  });
+  // Init sparkles after card shows
+  setTimeout(initSparkles, 1200);
+}
+
+/* ─── Sparkle Effect ─── */
+function initSparkles() {
+  const sparkleSymbols = ['✦', '✧', '⋆', '★', '✨', '✺'];
+  const wraps = [
+    document.getElementById('sparkle-wrap-1'),
+    document.getElementById('sparkle-wrap-2')
+  ];
+
+  wraps.forEach(wrap => {
+    if (!wrap) return;
+    const count = 6;
+    for (let i = 0; i < count; i++) {
+      const sp = document.createElement('div');
+      sp.className = 'sparkle';
+      const angle = (i / count) * 360;
+      const radius = 35 + Math.random() * 30;
+      const tx = Math.cos(angle * Math.PI / 180) * radius + 'px';
+      const ty = Math.sin(angle * Math.PI / 180) * radius + 'px';
+      const sz = (10 + Math.random() * 10) + 'px';
+      const dur = (1.5 + Math.random() * 2) + 's';
+      const delay = (Math.random() * 3) + 's';
+      sp.style.cssText = `
+        --tx:${tx}; --ty:${ty}; --sz:${sz};
+        --dur:${dur}; --delay:${delay};
+        top: 50%; left: 50%;
+        transform-origin: center;
+        margin-top: -8px; margin-left: -8px;
+        font-size: ${sz};
+        animation-duration: ${dur};
+        animation-delay: ${delay};
+      `;
+      sp.textContent = sparkleSymbols[Math.floor(Math.random() * sparkleSymbols.length)];
+      wrap.appendChild(sp);
+    }
+  });
+}
+
+/* ─── Countdown ─── */
+const EVENT_DATE = new Date('2026-06-15T20:00:00');
+function updateCountdown() {
+  const diff = EVENT_DATE - new Date();
+  const cdWrap  = document.getElementById('countdown-wrap');
+  const celWrap = document.getElementById('celebration-wrap');
+
+  if (diff <= 0) {
+    cdWrap.style.display  = 'none';
+    celWrap.classList.add('show');
+    // Launch celebratory petals
+    launchPetals();
+    return;
+  }
+
+  // Show countdown, hide celebration
+  cdWrap.style.display  = 'flex';
+  celWrap.classList.remove('show');
+
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent  = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent  = String(m).padStart(2,'0');
+  document.getElementById('cd-secs').textContent  = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ─── Petals ─── */
+let petals = [], petalActive = false;
+function launchPetals() {
+  const canvas = document.getElementById('petal-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+  const colors = ['#e8c4b8','#f0d9c8','#d4a9a0','#c9a35d','#b5c9a4','#9cb389','#f7e1d0'];
+  petals = [];
+  for (let i = 0; i < 80; i++) {
+    petals.push({
+      x: Math.random() * canvas.width, y: -Math.random() * canvas.height * 0.6,
+      r: 3 + Math.random() * 7,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 1.2, vy: 0.8 + Math.random() * 1.6,
+      wobble: Math.random() * Math.PI * 2, wobbleSpeed: 0.02 + Math.random() * 0.03,
+      rotation: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.06,
+    });
+  }
+  petalActive = true;
+  animatePetals(ctx, canvas);
+}
+function animatePetals(ctx, canvas) {
+  if (!petalActive) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let allGone = true;
+  petals.forEach(p => {
+    p.wobble += p.wobbleSpeed; p.x += p.vx + Math.sin(p.wobble) * 0.6;
+    p.y += p.vy; p.rotation += p.rotSpeed;
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rotation);
+    ctx.beginPath(); ctx.ellipse(0, 0, p.r, p.r * 1.6, 0, 0, Math.PI * 2);
+    ctx.fillStyle = p.color; ctx.globalAlpha = 0.82; ctx.fill(); ctx.restore();
+    if (p.y < canvas.height + 20) allGone = false;
+  });
+  if (!allGone) requestAnimationFrame(() => animatePetals(ctx, canvas));
+  else { petalActive = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+}
+
+/* ─── Music ─── */
+let musicPlaying = false;
+const audio = document.getElementById('bg-music');
+audio.volume = 0.25;
+function toggleMusic() {
+  if (musicPlaying) { audio.pause(); document.getElementById('music-btn').textContent = '🔇'; }
+  else { audio.play().catch(() => {}); document.getElementById('music-btn').textContent = '🎵'; }
+  musicPlaying = !musicPlaying;
+}
+
+/* ─── Share Modal ─── */
+function openShareModal() {
+  document.getElementById('share-modal-overlay').classList.add('show');
+  document.getElementById('copy-feedback').classList.remove('show');
+}
+
+function closeShareModal(e) {
+  if (!e || e.target === document.getElementById('share-modal-overlay')) {
+    document.getElementById('share-modal-overlay').classList.remove('show');
+  }
+}
+
+function shareWhatsApp() {
+  const url = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent('✨ دعوة خطوبة أحمد وزينب ✨\nيُشرفنا دعوتكم لحضور حفل الخطوبة المبارك\nالاثنين 15 يونيو 2026 - الساعة 8 مساءً\nDiarb Negm, LE Plaza Hall\n\n');
+  window.open(`https://wa.me/?text=${text}${url}`, '_blank');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href)
+    .then(() => {
+      document.getElementById('copy-feedback').classList.add('show');
+      setTimeout(() => document.getElementById('copy-feedback').classList.remove('show'), 3000);
+    })
+    .catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = window.location.href;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      document.getElementById('copy-feedback').classList.add('show');
+      setTimeout(() => document.getElementById('copy-feedback').classList.remove('show'), 3000);
+    });
+}
+
+/* ─── Add to Google Calendar ─── */
+function addToCalendar() {
+  const title   = encodeURIComponent('حفل خطوبة أحمد وزينب 💍');
+  const details = encodeURIComponent('حفل خطوبة مبارك - عائلات العطار ومحرات\nDiarb Negm, LE Plaza Hall');
+  const location = encodeURIComponent('Diarb Negm, LE Plaza Hall');
+  const start   = '20260615T180000Z'; // 8PM Cairo = 6PM UTC
+  const end     = '20260615T210000Z';
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
